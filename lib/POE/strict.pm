@@ -1,4 +1,4 @@
-# $Id: strict.pm 410 2004-11-13 20:03:58Z sungo $
+# $Id: strict.pm 417 2004-11-21 01:54:48Z sungo $
 package POE::strict;
 
 use warnings;
@@ -6,7 +6,7 @@ use strict;
 
 use vars qw($VERSION);
 
-$VERSION = '1.'.sprintf "%04d", (qw($Rev: 410 $))[1];
+$VERSION = '1.'.sprintf "%04d", (qw($Rev: 417 $))[1];
 
 # Assert when dispatching events to nonexistent sessions
 sub POE::Kernel::ASSERT_EVENTS () { 1 }
@@ -17,13 +17,22 @@ sub POE::Kernel::ASSERT_USAGE () { 1 }
 # Bitch about receiving unknown events
 sub POE::Session::ASSERT_STATES () { 1 }
 
+
 use POE::Kernel;
 use POE::Session;
 use POE;
 
+
 sub import {
+	my @orig_args = @_;
+
+	my @args;
+	foreach my $arg (@orig_args) {
+		push @args, $arg unless $arg eq __PACKAGE__;
+	}
+
 	my $caller = (caller())[0];
-	eval "package $caller; use POE;";
+	eval "package $caller; use POE qw(@args);";
 }
 
 1;
@@ -40,8 +49,24 @@ POE::strict - strict mode for POE
 L<POE::strict> acts a lot like the L<strict> pragma in perl. It activates
 internal constraints that are not normally active. The runtime behavior of
 L<POE> will be a lot more strict (duh) and potentially very loud if your code
-is in any way questionable as far as the L<POE> core is concerned. The list of
-activated asserts is as follows:
+is in any way questionable as far as the L<POE> core is concerned. 
+
+This module can be used as if it were L<POE> itself. Suggested usage is the 
+removal of all instances of C<use POE> and replacing those with 
+C<use POE::strict>. 
+
+For example,
+
+  use POE::strict qw(Component::Client::TCP);
+
+behaves exactly like
+
+  use POE qw(Component::Client::TCP);
+
+(Yeah, yeah, the former is not as semantically nice as the latter. Blame
+C<#poe>. They thought the functionality was a bonus and I agreed.)
+
+The list of activated asserts is as follows:
 
 =over
 
@@ -59,17 +84,26 @@ Yell about receiving unknown events
 
 =back
 
+=head1 CAVEATS
+
+The constants defined by this module MUST be loaded before POE is. So if
+some other module calls C<use POE> before POE::strict gets compiled, all
+is for naught. You'll probably get some nice redefine warnings and no
+strictness. At some point, these constants will be turned into something
+a little more runtime friendly. Until then, make sure POE::strict is
+what loads up POE.
+
 =head1 AUTHOR
 
 sungo (sungo@cpan.org)
 
 =head1 DATE
 
-$Date: 2004-11-13 15:03:58 -0500 (Sat, 13 Nov 2004) $
+$Date: 2004-11-20 20:54:48 -0500 (Sat, 20 Nov 2004) $
 
 =head1 REVISION
 
-$Revision: 410 $
+$Revision: 417 $
 
 =head1 LICENSE
 

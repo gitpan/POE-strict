@@ -1,4 +1,4 @@
-# $Id: Makefile.PL 410 2004-11-13 20:03:58Z sungo $
+# $Id: Makefile.PL 418 2004-11-21 02:01:33Z sungo $
 
 use ExtUtils::MakeMaker;
 WriteMakefile(
@@ -10,6 +10,6 @@ WriteMakefile(
 		'Test::More' => '0',
 	},
 	dist => {
-		PREOP => 'svn log > ${DISTVNAME}/Changes',
+		PREOP => 'svn log --non-interactive -r 0:HEAD > ${DISTVNAME}/Changes; perldoc -t lib/POE/strict.pm > ${DISTVNAME}/README',
 	},
 );
