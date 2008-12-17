@@ -1,15 +1,14 @@
-# $Id: Makefile.PL 418 2004-11-21 02:01:33Z sungo $
+use inc::Module::Install;
 
-use ExtUtils::MakeMaker;
-WriteMakefile(
-	NAME => 'POE::strict',
-	AUTHOR => 'Matt Cashner (sungo@cpan.org)',
-	VERSION_FROM => 'VERSION',
-	PREREQ_PM => {
-		POE => '0',
-		'Test::More' => '0',
-	},
-	dist => {
-		PREOP => 'svn log --non-interactive -r 0:HEAD > ${DISTVNAME}/Changes; perldoc -t lib/POE/strict.pm > ${DISTVNAME}/README',
-	},
-);
+name            ('POE-strict');
+author          ('Matt Cashner (sungo@pobox.com)');
+version_from    ('VERSION');
+license         ('bsd');
+
+requires        ('POE');
+requires        ('Test::More');
+
+build_requires  ('Test::Distribution');
+build_requires  ('Test::Pod::Coverage');
+
+WriteAll();

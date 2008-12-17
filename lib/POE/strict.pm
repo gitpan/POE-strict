@@ -1,4 +1,3 @@
-# $Id: strict.pm 417 2004-11-21 01:54:48Z sungo $
 package POE::strict;
 
 use warnings;
@@ -6,7 +5,7 @@ use strict;
 
 use vars qw($VERSION);
 
-$VERSION = '1.'.sprintf "%04d", (qw($Rev: 417 $))[1];
+$VERSION = '3.01';
 
 # Assert when dispatching events to nonexistent sessions
 sub POE::Kernel::ASSERT_EVENTS () { 1 }
@@ -95,15 +94,7 @@ what loads up POE.
 
 =head1 AUTHOR
 
-sungo (sungo@cpan.org)
-
-=head1 DATE
-
-$Date: 2004-11-20 20:54:48 -0500 (Sat, 20 Nov 2004) $
-
-=head1 REVISION
-
-$Revision: 417 $
+Matt Cashner (sungo@pobox.com)
 
 =head1 LICENSE
 
@@ -137,6 +128,4 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 =cut
 
-
-=cut
-
+# sungo // vim: ts=4 sw=4 noet
